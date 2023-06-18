@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - /opt/silver-umbrella/postgres:/var/lib/postgresql/data
+    networks:
+      - apiRest
+
+  apirest:
+    build: apiREST/.
+    container_name: apirest
+    restart: unless-stopped
+    volumes:
+      - /opt/silver-umbrella/apiREST:/opt/app
+    environment:
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    networks:
+      - apiRest
+      - nginx-manager
+    depends_on:
+      - postgres
+
+  nginx-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - /opt/silver-umbrella/nginx-proxy-manager/data:/data
+      - /opt/silver-umbrella/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    networks:
+      - nginx-manager
+
+networks:
+  nginx-manager:
+    name: nginx-manager
+  apiRest:
+    name: apiRest
+
+
