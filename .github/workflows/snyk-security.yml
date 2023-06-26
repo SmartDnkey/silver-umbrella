@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Test
+        run: ls
       - name: Run snyk code scan
         uses: snyk/actions/python-3.10@master
         env:
