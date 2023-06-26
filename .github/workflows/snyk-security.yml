@@ -18,8 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Test
-        run: ls
+      - name: Run Snyk to check iac files
+        uses: snyk/actions/iac@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --scan=resource-changes --severity-threshold=high --report
+      - name: Move directory
+        run: cd apiREST
       - name: Run snyk code scan
         uses: snyk/actions/python-3.10@master
         env:
