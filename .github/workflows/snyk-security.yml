@@ -5,12 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install packages
-        run: pip install -r apiREST/requirements.txt
+      - name: Go to dependency directory
+        run: cd apiREST
       - name: Run Snyk to check vulnerabilities in python code
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=apiREST/requirements.txt -d
-
