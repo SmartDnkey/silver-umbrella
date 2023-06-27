@@ -1,29 +1,13 @@
-name: Snyk Security
-
-on:
-  push:
-    branches: ["main" ]
-  pull_request:
-    branches: ["main"]
-
-permissions:
-  contents: read
-
+name: Snyk Scan
+on: push
 jobs:
-  snyk:
-    permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+  security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Move directory
-        run: cd apiREST
-      - name: Run snyk code scan
-        uses: snyk/actions/python-3.10@master
+      - name: Run Snyk to check vulnerabilities in python code
+        uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
-          command: monitor
+          args: --scan=resource-changes --severity-threshold=high --report
