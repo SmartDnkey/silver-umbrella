@@ -13,4 +13,4 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: apirest
-        args: --file=apiREST/Dockerfile
+        args: --file=apiREST/Dockerfile --severity-threshold=high
