@@ -7,7 +7,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Go to dependency directory
         run: cd apiREST
+      - name: LS
+        run: ls
+      - name: pip install
+        run: pip install -r requirements.txt
       - name: Run Snyk to check vulnerabilities in python code
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high   -d       
+      
