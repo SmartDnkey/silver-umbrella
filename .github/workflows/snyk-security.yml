@@ -5,16 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Go to dependency directory
+      - name: Copy requirements file to root directory for Snyk
         run: cp apiREST/requirements.txt .
-      - name: LS
-        run: ls
-      - name: pip install
-        run: pip install -r requirements.txt
       - name: Run Snyk to check vulnerabilities in python code
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high   -d       
+          args: --severity-threshold=high        
       
